@@ -53,7 +53,9 @@ def main(args):
     for onetab in onetabs:
         if not onetab.startswith("http"):
             continue
-        site, name = onetab.strip().split(" | ", 1)
+        fields = onetab.strip().split(" | ", 1)
+        site = fields[0]
+        name = fields[1] if len(fields) > 1 else site
         out.write(
             f'<DT><A HREF="{site}" LAST_VISIT="{now}" LAST_MODIFIED="{now}">'
             f'{name}</A></DT>\n'
