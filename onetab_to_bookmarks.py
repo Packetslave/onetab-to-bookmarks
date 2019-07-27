@@ -47,7 +47,11 @@ def main(args):
     else:
         onetabs = sys.stdin.readlines()
 
-    now = int(time.time())
+    # Pinboard (for example) doesn't like it when you have a ton of bookmarks
+    # all with the same timestamp. Hack around that by setting each entry to
+    # be N seconds in the past.
+    now = int(time.time() - (len(onetabs) * 65))
+
     out.write(HEADER)
 
     for onetab in onetabs:
@@ -56,10 +60,12 @@ def main(args):
         fields = onetab.strip().split(" | ", 1)
         site = fields[0]
         name = fields[1] if len(fields) > 1 else site
+
         out.write(
             f'<DT><A HREF="{site}" LAST_VISIT="{now}" LAST_MODIFIED="{now}">'
             f'{name}</A></DT>\n'
         )
+        now += 65
 
     out.write(FOOTER)
 
